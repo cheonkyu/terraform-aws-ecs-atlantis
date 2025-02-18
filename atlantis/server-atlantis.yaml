@@ -1,0 +1,8 @@
+repos:
+  - id: /.*/
+    branch: /.*/
+    allow_custom_workflows: true
+    apply_requirements:
+      - approved
+    workflow: default
+    allowed_overrides: [workflow, apply_requirements]
