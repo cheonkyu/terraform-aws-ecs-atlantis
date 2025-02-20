@@ -144,23 +144,8 @@ module "vpc" {
   private_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 4, k)]
   public_subnets  = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 48)]
 
-  enable_nat_gateway = false
-  single_nat_gateway = false
+  enable_nat_gateway = true
+  single_nat_gateway = true
 
   tags = local.tags
-}
-
-module "nat" {
-  source = "int128/nat-instance/aws"
-
-  name                        = local.name # "nat-instance-${name}" prefix가 있음
-  vpc_id                      = module.vpc.vpc_id
-  public_subnet               = module.vpc.public_subnets[0]
-  private_subnets_cidr_blocks = module.vpc.private_subnets_cidr_blocks
-  private_route_table_ids     = module.vpc.private_route_table_ids
-}
-
-resource "aws_eip" "nat" {
-  network_interface = module.nat.eni_id
-  tags              = local.tags
 }
